@@ -68,6 +68,16 @@ class poseDetector():
             cv2.putText(img, str(int(angle)), (x2 - 50, y2 + 50),
                         cv2.FONT_HERSHEY_PLAIN, 2, (0, 0, 255), 2)
         return angle
+    
+    def draw_lines(self, img, points, colors):
+        for i in range(len(points) - 1):
+            point1 = points[i]
+            point2 = points[i + 1]
+            color = colors[i]
+            x1, y1 = self.lmList[point1][1:]
+            x2, y2 = self.lmList[point2][1:]
+            cv2.line(img, (x1, y1), (x2, y2), color, 3)
+        return img
 
 
 def main():
