@@ -193,13 +193,20 @@ def squats():
 
 
 
-@app.route('/pushups', methods=['GET'])
+@app.route('/pushups', methods=['POST'])
 def pushups():
-    video = request.args.get('video')
-    output_video_name = os.path.splitext(os.path.basename(video))[0] + "_processed.mp4"
+    video_base64 = request.json['video']
+    video_bytes = base64.b64decode(video_base64)
+
+    # Save the video to a temporary file
+    temp_video_path = 'temp_video.mp4'
+    with open(temp_video_path, 'wb') as file:
+        file.write(video_bytes)
+
+    output_video_name = os.path.splitext(os.path.basename(temp_video_path))[0] + "_processed.mp4"
     output_video_path = os.path.join('video', output_video_name)
 
-    cap = cv2.VideoCapture(video)
+    cap = cv2.VideoCapture(temp_video_path)
     detector = pm.poseDetector()
     count = 0
     back_error_final = 0
@@ -273,8 +280,16 @@ def pushups():
     out.release()
     cap.release()
 
+    # Read the processed video and encode it as base64
+    with open(output_video_path, 'rb') as file:
+        output_video_bytes = file.read()
+        output_video_base64 = base64.b64encode(output_video_bytes).decode('utf-8')
+
+    # Remove the temporary video file
+    os.remove(temp_video_path)
+
     return jsonify({
-        "output_video": os.path.abspath(output_video_path),
+        "output_video": output_video_base64,
         "count": count,
         "accuracy": accuracy,
         "error": [{
@@ -287,13 +302,20 @@ def pushups():
 
 
 
-@app.route('/abs_legs', methods=['GET'])
+@app.route('/abs_legs', methods=['POST'])
 def abs_legs():
-    video = request.args.get('video')
-    output_video_name = os.path.splitext(os.path.basename(video))[0] + "_processed.mp4"
+    video_base64 = request.json['video']
+    video_bytes = base64.b64decode(video_base64)
+
+    # Save the video to a temporary file
+    temp_video_path = 'temp_video.mp4'
+    with open(temp_video_path, 'wb') as file:
+        file.write(video_bytes)
+
+    output_video_name = os.path.splitext(os.path.basename(temp_video_path))[0] + "_processed.mp4"
     output_video_path = os.path.join('video', output_video_name)
 
-    cap = cv2.VideoCapture(video)
+    cap = cv2.VideoCapture(temp_video_path)
     detector = pm.poseDetector()
     count = 0
     dir = 1
@@ -363,8 +385,16 @@ def abs_legs():
     out.release()
     cap.release()
 
+    # Read the processed video and encode it as base64
+    with open(output_video_path, 'rb') as file:
+        output_video_bytes = file.read()
+        output_video_base64 = base64.b64encode(output_video_bytes).decode('utf-8')
+
+    # Remove the temporary video file
+    os.remove(temp_video_path)
+
     return jsonify({
-        "output_video": os.path.abspath(output_video_path),
+        "output_video": output_video_base64,
         "count": count,
         "accuracy": accuracy,
         "error": [
@@ -379,13 +409,20 @@ def abs_legs():
 
 
 
-@app.route('/lateral_raise', methods=['GET'])
+@app.route('/lateral_raise', methods=['POST'])
 def lateral_raise():
-    video = request.args.get('video')
-    output_video_name = os.path.splitext(os.path.basename(video))[0] + "_processed.mp4"
+    video_base64 = request.json['video']
+    video_bytes = base64.b64decode(video_base64)
+
+    # Save the video to a temporary file
+    temp_video_path = 'temp_video.mp4'
+    with open(temp_video_path, 'wb') as file:
+        file.write(video_bytes)
+
+    output_video_name = os.path.splitext(os.path.basename(temp_video_path))[0] + "_processed.mp4"
     output_video_path = os.path.join('video', output_video_name)
 
-    cap = cv2.VideoCapture(video)
+    cap = cv2.VideoCapture(temp_video_path)
     detector = pm.poseDetector()
     count = 0
     dir = 1
@@ -449,8 +486,16 @@ def lateral_raise():
     out.release()
     cap.release()
 
+    # Read the processed video and encode it as base64
+    with open(output_video_path, 'rb') as file:
+        output_video_bytes = file.read()
+        output_video_base64 = base64.b64encode(output_video_bytes).decode('utf-8')
+
+    # Remove the temporary video file
+    os.remove(temp_video_path)
+
     return jsonify({
-        "output_video": os.path.abspath(output_video_path),
+        "output_video": output_video_base64,
         "count": count,
         "accuracy": accuracy,
         "error": [
